@@ -9,14 +9,9 @@ import {
 
 import { OrderStatusBadge } from "@/components/OrderStatusBadge";
 import { OrderTypeBadge } from "@/components/OrderTypeBadge";
+import { WalletList } from "@/components/WalletList";
+import { getOrders, getWallet } from "@/queries/queries";
 import { AssetItem } from "../../components/AssetItem";
-
-export async function getOrders(walletId: string): Promise<Order[]> {
-  const response = await fetch(
-    `http://localhost:3333/orders?walletId=${walletId}`,
-  );
-  return response.json();
-}
 
 export default async function OrdersPage({
   searchParams,
@@ -24,6 +19,11 @@ export default async function OrdersPage({
   searchParams: Promise<{ walletId: string }>;
 }) {
   const { walletId } = await searchParams;
+  if (!walletId) return <WalletList />;
+
+  const wallet = await getWallet(walletId);
+  if (!wallet) return <WalletList />;
+
   const orders = await getOrders(walletId);
 
   return (

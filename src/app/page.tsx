@@ -7,13 +7,11 @@ import {
   TableHeadCell,
   TableRow,
 } from "flowbite-react";
+import Link from "next/link";
 
+import { WalletList } from "@/components/WalletList";
+import { getWallet } from "@/queries/queries";
 import { AssetItem } from "../components/AssetItem";
-
-export async function getMyWallet(walletId: string): Promise<Wallet> {
-  const response = await fetch(`http://localhost:3333/wallets/${walletId}`);
-  return response.json();
-}
 
 export default async function MyWalletPage({
   searchParams,
@@ -21,7 +19,10 @@ export default async function MyWalletPage({
   searchParams: Promise<{ walletId: string }>;
 }) {
   const { walletId } = await searchParams;
-  const wallet = await getMyWallet(walletId);
+  if (!walletId) return <WalletList />;
+
+  const wallet = await getWallet(walletId);
+  if (!wallet) return <WalletList />;
 
   return (
     <div className="flex flex-col space-y-5 flex-grow">
@@ -38,7 +39,7 @@ export default async function MyWalletPage({
             <TableHeadCell>Comprar/Vender</TableHeadCell>
           </TableHead>
           <TableBody>
-            {wallet.assets?.map(walletAsset => (
+            {wallet.assets.map(walletAsset => (
               <TableRow key={walletAsset.asset.ticker}>
                 <TableCell>
                   <AssetItem asset={walletAsset.asset} />
@@ -46,7 +47,14 @@ export default async function MyWalletPage({
                 <TableCell>R$ {walletAsset.asset.price}</TableCell>
                 <TableCell>{walletAsset.shares}</TableCell>
                 <TableCell>
-                  <Button color="light">Comprar / Vender</Button>
+                  <Button
+                    color="light"
+                    as={Link}
+                    href={`/assets/${walletAsset.asset.ticker}?walletId=${walletId}`}
+                    className="w-fit"
+                  >
+                    Comprar / Vender
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

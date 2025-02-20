@@ -7,16 +7,24 @@ import {
   TableHeadCell,
   TableRow,
 } from "flowbite-react";
+import Link from "next/link";
 
+import { WalletList } from "@/components/WalletList";
+import { getAssets, getWallet } from "@/queries/queries";
 import { AssetItem } from "../../components/AssetItem";
 
-export async function getAssets(): Promise<Asset[]> {
-  const response = await fetch(`http://localhost:3333/assets`);
-  return response.json();
-}
-
-export default async function AssetsPage() {
+export default async function AssetsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ walletId: string }>;
+}) {
   const assets = await getAssets();
+
+  const { walletId } = await searchParams;
+  if (!walletId) return <WalletList />;
+
+  const wallet = await getWallet(walletId);
+  if (!wallet) return <WalletList />;
 
   return (
     <div className="flex flex-col space-y-5 flex-grow">
@@ -39,7 +47,14 @@ export default async function AssetsPage() {
                 </TableCell>
                 <TableCell>R$ {asset.price}</TableCell>
                 <TableCell>
-                  <Button color="light">Comprar / Vender</Button>
+                  <Button
+                    color="light"
+                    as={Link}
+                    href={`/assets/${asset.ticker}?walletId=${walletId}`}
+                    className="w-fit"
+                  >
+                    Comprar / Vender
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

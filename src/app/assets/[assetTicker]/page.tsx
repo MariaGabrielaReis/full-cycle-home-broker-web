@@ -1,13 +1,11 @@
+import { Card, TabItem, Tabs } from "flowbite-react";
+
 import { OrderType } from "@/app/enums";
 import { AssetItem } from "@/components/AssetItem";
 import { OrderForm } from "@/components/OrderForm";
-import { Card, TabItem, Tabs } from "flowbite-react";
+import { WalletList } from "@/components/WalletList";
+import { getAsset, getWallet } from "@/queries/queries";
 import { AssetChart } from "./AssetChart";
-
-export async function getAsset(ticker: string): Promise<Asset> {
-  const response = await fetch(`http://localhost:3333/assets/${ticker}`);
-  return response.json();
-}
 
 export default async function AssetDetails({
   params,
@@ -16,9 +14,13 @@ export default async function AssetDetails({
   params: Promise<{ assetTicker: string }>;
   searchParams: Promise<{ walletId: string }>;
 }) {
-  const { assetTicker } = await params;
   const { walletId } = await searchParams;
+  if (!walletId) return <WalletList />;
 
+  const wallet = await getWallet(walletId);
+  if (!wallet) return <WalletList />;
+
+  const { assetTicker } = await params;
   const asset = await getAsset(assetTicker);
 
   return (
