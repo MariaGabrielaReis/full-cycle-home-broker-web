@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -13,7 +14,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="h-screen flex flex-col p-10">{children}</body>
+      <body className="h-screen flex flex-col ">
+        <Navbar />
+
+        <div className="container mx-auto p-10 flex flex-grow">{children}</div>
+      </body>
     </html>
   );
 }
