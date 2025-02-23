@@ -30,7 +30,7 @@ export default async function AssetDetails({
         <span className="ml-2 font-bold text-2xl">R$ {asset.price}</span>
       </div>
 
-      <div className="grid grid-cols-5 flex-grow gap-2">
+      <div className="grid grid-cols-5 flex-grow gap-10">
         <div className="col-span-2">
           <Card>
             <Tabs>
