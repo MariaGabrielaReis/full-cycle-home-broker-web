@@ -1,5 +1,8 @@
 import Navbar from "@/components/Navbar";
 import type { Metadata } from "next";
+
+import { ToastContainer } from "@/components/ToastContainer";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,6 +21,8 @@ export default function RootLayout({
         <Navbar />
 
         <div className="container mx-auto p-10 flex flex-grow">{children}</div>
+
+        <ToastContainer />
       </body>
     </html>
   );
