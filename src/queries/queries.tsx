@@ -22,3 +22,12 @@ export async function getOrders(walletId: string): Promise<Order[]> {
   );
   return response.json();
 }
+
+export async function getAssetDailies(
+  assetTicker: string,
+): Promise<AssetDaily[]> {
+  const response = await fetch(
+    `http://localhost:3333/assets/${assetTicker}/dailies`,
+  );
+  return response.json();
+}

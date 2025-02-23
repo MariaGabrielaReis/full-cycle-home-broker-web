@@ -6,6 +6,13 @@ type Asset = {
   image_url: string;
 };
 
+type AssetDaily = {
+  _id: string;
+  asset: Asset;
+  date: string;
+  price: number;
+};
+
 type WalletAsset = {
   _id: string;
   asset: Asset;
